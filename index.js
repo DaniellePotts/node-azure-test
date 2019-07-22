@@ -2,6 +2,7 @@ const express = require("express");
 const Azure = require("azure-storage");
 const fs = require("fs-extra");
 const path = require("path");
+const base64 = require("base64-js")
 const mockKey =
   "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;";
 const app = express();
@@ -80,7 +81,7 @@ async function read(container, filename) {
         if (!error) {
           const bytes = fs.readFileSync(filename);
           fs.removeSync(filename);
-          resolve(bytes);
+          resolve(base64.fromByteArray(bytes));
         } else {
           reject({ error: error });
         }
